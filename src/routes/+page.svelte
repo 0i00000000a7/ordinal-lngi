@@ -22,7 +22,6 @@
     }
   });
 
-  // 清理定时器
   onDestroy(() => {
     if (intervalId) clearInterval(intervalId);
   });
