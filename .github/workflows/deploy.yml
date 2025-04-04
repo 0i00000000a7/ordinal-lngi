@@ -1,0 +1,38 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]  # 监听 main 分支的推送（根据你的主分支名称调整）
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write  # 允许写入 Pages
+      pages: write      # 启用 Pages 部署
+      id-token: write   # 启用 OIDC 身份验证
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22  # 根据你的项目 Node 版本调整
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/  # 上传构建后的 dist 目录
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        if: success()  # 仅在构建成功时部署>
