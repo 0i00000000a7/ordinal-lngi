@@ -15,10 +15,11 @@
       t = saved ? Number(saved) : 0;
 
       intervalId = setInterval(() => {
-        t = Math.min(t + 1, 125000)
+        t = Math.min(t + 1, 180000)
+        // t = 134000
         localStorage.ordinal_lngi_rewritten = t
-      }, 16.666666666666666666);
-      // }, 0);
+      // }, 16.666666666666666666);
+      }, 0);
     }
   });
 
@@ -38,7 +39,7 @@
     return -Math.log(1-n) / Math.log(base)
   }
   
-  function InversedLogInfinitized(n: number, base = 2) {
+  function InversedLogInfinitize(n: number, base = 2) {
     return 1 - base ** -n
   }
 
@@ -83,7 +84,7 @@
       let c = `ψ(${b})`
       let d = LogInfinitize(a - b, 1.75) + 1
       let e = Math.floor(d)
-      let f = (d - e) * (InversedInfinitize(b + InversedLogInfinitized(e)) * 25000 + 75000 - 1500) + 1500
+      let f = (d - e) * (InversedInfinitize(b + InversedLogInfinitize(e, 1.75)) * 25000 + 75000 - 1500) + 1500
       let g = ordinal(f)
       let h = Infinitize(d - e) + 1
       let i = Math.floor(h)
@@ -97,11 +98,45 @@
       let d = String(b)
       if (b == 1) d = ""
       return `ψ<sup>${d}</sup>(${ordinal(c)})`
+    } else if (x < 155000) {
+      let a = Infinitize((x - 125000) / 30000) + 1
+      let b = Math.floor(a)
+      let c = Infinitize(a - b) + 1
+      let d = Math.floor(c)
+      let e = ordinal((InversedInfinitize(b + InversedLogInfinitize(d) - 1) * 30000 + 125000) * (c - d))
+      let f = `ψ(Ω${b == 1? "" : b}`
+      if (d > 5) return `${f}+${f}+...${e}...))(${d} repeats)`
+      return `${f}+`.repeat(d - 1) + f + (e == "0" ? "" : "+" + e) + ")".repeat(d)
+    } else if (x < 180000) {
+      let a = Infinitize((x - 155000) / 50000 + 0.5)
+      let b = Math.floor(a)
+      let c = (a - b) * 152000 + 3000
+      if (b > 5) return `ψ(Ωψ(Ω...${ordinal(c)}...))(${b} repeats)`
+      return "ψ(Ω".repeat(b) + ordinal(c) + ")".repeat(b)
     } else {
-      return "ψ(Ω)"
+      return "ψ(Ω<sup>2</sup>)"
     }
   }
 </script>
 
 {@html ordinal(t)}<br>
-<!--{t}!-->
+{t}
+
+<svelte:head>
+  <style>
+    body {
+      margin: 32px;
+      background: black;
+      font-size: 25px;
+      user-select: none;
+      color: white;
+      font-family: Bahnschrift, sans-serif
+    }
+    
+    @font-face {
+	    font-family: 'Bahnschrift';
+	    src: url('bahnschrift.ttf');
+	    size-adjust: 100%;
+    }
+  </style>
+</svelte:head>
